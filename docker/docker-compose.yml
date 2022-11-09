@@ -1,0 +1,12 @@
+version: "3.5"
+services:
+  db:
+    container_name: mysql_container
+    image: mysql
+    ports:
+      - '5400:5400'
+    environment:
+      MYSQL_DB: gitfit
+      MYSQL_USER: profile
+      MYSQL_PASSWORD: profile
+      MYSQL_ROOT_PASSWORD: admin
