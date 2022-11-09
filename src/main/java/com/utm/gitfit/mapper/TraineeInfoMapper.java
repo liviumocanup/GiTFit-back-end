@@ -2,10 +2,13 @@ package com.utm.gitfit.mapper;
 
 import com.utm.gitfit.dto.TraineeInfoDto;
 import com.utm.gitfit.model.TraineeInfo;
+import lombok.NoArgsConstructor;
 
 import java.util.function.Function;
 
-//@NoArgsConstructor(access = PRIVATE)
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public class TraineeInfoMapper {
     public static final Function<TraineeInfo, TraineeInfoDto> mapToDto = traineeInfo ->
             TraineeInfoDto.builder()

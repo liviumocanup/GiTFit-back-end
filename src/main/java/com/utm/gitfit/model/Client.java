@@ -59,7 +59,7 @@ public class Client {
     @Column(name = "birthday")
     private LocalDate birthday;
 
-    @Column(name = "bank_account_id", table = "bankAccount")
+    @Column(name = "bank_account_id")
     private Long bankAccountId;
 
     @ManyToOne(fetch = LAZY)

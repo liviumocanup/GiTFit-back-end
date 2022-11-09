@@ -4,7 +4,7 @@ services:
     container_name: mysql_container
     image: mysql
     ports:
-      - '5400:5400'
+      - '3306:3306'
     environment:
       MYSQL_DB: gitfit
       MYSQL_USER: profile

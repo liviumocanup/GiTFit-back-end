@@ -1,6 +1,7 @@
 package com.utm.gitfit.service;
 
 import com.utm.gitfit.dto.ClientDto;
+import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.mapper.ClientMapper;
 import com.utm.gitfit.mapper.TraineeInfoMapper;
 import com.utm.gitfit.model.Client;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,10 +33,6 @@ public class ClientService {
         return mapToDto.apply(findClientById(id));
     }
 
-    private Client findClientById(Long id) {
-        return clientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Client with id: " + id + " not found."));
-    }
-
     @Transactional
     public ClientDto save(ClientDto clientDto) {
         return mapToDto.apply(clientRepository.save(mapToEntity.apply(clientDto)));
@@ -53,9 +49,12 @@ public class ClientService {
         repoClient.setPassword(clientDto.getPassword());
         repoClient.setBirthday(clientDto.getBirthday());
         repoClient.setBankAccountId(clientDto.getBankAccountId());
-        repoClient.setCoach();
         repoClient.setTraineeInfo(TraineeInfoMapper.mapToEntity.apply(clientDto.getTraineeInfo()));
 
         return ClientMapper.mapToDto.apply(repoClient);
+    }
+
+    private Client findClientById(Long id) {
+        return clientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Client with id: " + id + " not found."));
     }
 }

@@ -1,7 +1,7 @@
 package com.utm.gitfit.controller;
 
-import com.utm.gitfit.dto.ClientDto;
-import com.utm.gitfit.service.ClientService;
+import com.utm.gitfit.dto.CoachDto;
+import com.utm.gitfit.service.CoachService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,38 +25,38 @@ public class CoachController {
     private final CoachService coachService;
 
     @GetMapping
-    public List<ClientDto> findAll() {
-        return clientService.findAll();
+    public List<CoachDto> findAll() {
+        return coachService.findAll();
     }
 
     @GetMapping("{id}")
-    public ClientDto findById(@PathVariable long id) {
-        return clientService.findById(id);
+    public CoachDto findById(@PathVariable long id) {
+        return coachService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody ClientDto clientDto) {
-        ClientDto savedClient = clientService.save(clientDto);
+    public ResponseEntity<?> create(@Valid @RequestBody CoachDto coachDto) {
+        CoachDto savedCoach = coachService.save(coachDto);
 
         URI uri = MvcUriComponentsBuilder.fromController(getClass())
                 .path("/{id}")
-                .build(savedClient.getId());
+                .build(savedCoach.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(uri)
-                .body(savedClient);
+                .body(savedCoach);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable long id, @Valid @RequestBody ClientDto clientDto) {
-        ClientDto updatedClient = clientService.update(id, clientDto);
+    public ResponseEntity<?> update(@PathVariable long id, @Valid @RequestBody CoachDto coachDto) {
+        CoachDto updatedCoach = coachService.update(id, coachDto);
 
         URI uri = MvcUriComponentsBuilder.fromController(getClass())
                 .path("/{id}")
-                .build(updatedClient.getId());
+                .build(updatedCoach.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .location(uri)
-                .body(updatedClient);
+                .body(updatedCoach);
     }
 }

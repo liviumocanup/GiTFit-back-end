@@ -25,8 +25,5 @@ public class ClientDto {
 
     private Long bankAccountId;
 
-    //or Id, depending on front?
-    private String coachName;
-
     private TraineeInfoDto traineeInfo;
 }

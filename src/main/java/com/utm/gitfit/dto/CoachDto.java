@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
@@ -25,7 +24,4 @@ public class CoachDto {
     private LocalDate birthday;
 
     private Long bankAccountId;
-
-    //or Ids, depending on front?
-    private List<String> clients;
 }

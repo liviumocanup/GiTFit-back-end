@@ -19,7 +19,6 @@ public class ClientMapper {
                     .username(client.getUsername())
                     .password(client.getPassword())
                     .birthday(client.getBirthday())
-                    .coachName(client.getCoach().getName() + client.getCoach().getLastName())
                     .bankAccountId(client.getBankAccountId())
                     .traineeInfo(TraineeInfoMapper.mapToDto.apply(client.getTraineeInfo()))
                     .build();
@@ -33,9 +32,7 @@ public class ClientMapper {
                     .username(clientDto.getUsername())
                     .password(clientDto.getPassword())
                     .birthday(clientDto.getBirthday())
-                    .coach()
                     .bankAccountId(clientDto.getBankAccountId())
-                    .traineeInfo(clientDto.getTraineeInfo())
+                    .traineeInfo(TraineeInfoMapper.mapToEntity.apply(clientDto.getTraineeInfo()))
                     .build();
 }
-//find coach by name
