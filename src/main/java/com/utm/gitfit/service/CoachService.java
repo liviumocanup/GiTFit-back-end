@@ -1,14 +1,17 @@
 package com.utm.gitfit.service;
 
 import com.utm.gitfit.dto.CoachDto;
+import com.utm.gitfit.dto.UserDtoRequest;
 import com.utm.gitfit.exception.EntityNotFoundException;
-import com.utm.gitfit.mapper.CoachMapper;
+import com.utm.gitfit.model.Client;
 import com.utm.gitfit.model.Coach;
+import com.utm.gitfit.repository.ClientRepository;
 import com.utm.gitfit.repository.CoachRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +22,7 @@ import static com.utm.gitfit.mapper.CoachMapper.mapToEntity;
 @RequiredArgsConstructor
 public class CoachService {
     private final CoachRepository coachRepository;
+    private final ClientRepository clientRepository;
 
     @Transactional(readOnly = true)
     public List<CoachDto> findAll() {
@@ -29,12 +33,12 @@ public class CoachService {
 
     @Transactional(readOnly = true)
     public CoachDto findById(Long id) {
-        return mapToDto.apply(findCoachById(id));
+        return coachToDto(findCoachById(id));
     }
 
     @Transactional
     public CoachDto save(CoachDto coachDto) {
-        return mapToDto.apply(coachRepository.save(mapToEntity.apply(coachDto)));
+        return coachToDto(coachRepository.save(mapToEntity.apply(coachDto)));
     }
 
     @Transactional
@@ -49,10 +53,49 @@ public class CoachService {
         repoCoach.setBirthday(coachDto.getBirthday());
         repoCoach.setBankAccountId(coachDto.getBankAccountId());
 
-        return CoachMapper.mapToDto.apply(repoCoach);
+        return coachToDto(repoCoach);
+    }
+
+    @Transactional
+    public CoachDto addClients(long id, List<UserDtoRequest> clientRequests) {
+        Coach repoCoach = findCoachById(id);
+
+        if (repoCoach.getClients() == null) {
+            repoCoach.setClients(new ArrayList<>());
+        }
+
+        for (UserDtoRequest clientRequest : clientRequests) {
+            repoCoach.getClients().add(findClientByIdAndFullName(clientRequest));
+        }
+
+        return coachToDto(repoCoach);
+    }
+
+    @Transactional
+    public CoachDto removeClients(long id, List<UserDtoRequest> clientRequests) {
+        Coach repoCoach = findCoachById(id);
+
+        if (repoCoach.getClients() == null || repoCoach.getClients().isEmpty()) {
+            throw new EntityNotFoundException("Coach with id: " + repoCoach.getId() + ", does not have any clients to remove.");
+        }
+
+        for (UserDtoRequest clientRequest : clientRequests) {
+            repoCoach.getClients().remove(findClientByIdAndFullName(clientRequest));
+        }
+
+        return coachToDto(repoCoach);
+    }
+
+    private Client findClientByIdAndFullName(UserDtoRequest clientRequest) {
+        return clientRepository.findByIdAndNameAndLastName(clientRequest.getId(), clientRequest.getName(), clientRequest.getLastName())
+                .orElseThrow(() -> new EntityNotFoundException("Client: " + clientRequest + ", not found."));
     }
 
     private Coach findCoachById(Long id) {
-        return coachRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Coach with id: " + id + " not found."));
+        return coachRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Coach with id: " + id + ", not found."));
+    }
+
+    private CoachDto coachToDto(Coach coach) {
+        return mapToDto.apply(coach);
     }
 }

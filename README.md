@@ -33,7 +33,7 @@ Technologies: Spring Boot with Maven and MySql Database.
 
 11. After that enter this command : mvn clean install
 
-12. Wait until the end and run the project using this command: java -jar target/profile-api-0.0.1-SNAPSHOT.jar
+12. Wait until the end and run the project using this command: java -jar target/GiTFit-0.0.1-SNAPSHOT.jar
 
 13. For checking if project works you can do a get request in postman using: http://localhost:8080/clients/save
 
