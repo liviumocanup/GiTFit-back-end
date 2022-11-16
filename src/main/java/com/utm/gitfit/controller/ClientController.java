@@ -1,6 +1,7 @@
 package com.utm.gitfit.controller;
 
 import com.utm.gitfit.dto.ClientDto;
+import com.utm.gitfit.dto.UserDtoRequest;
 import com.utm.gitfit.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,32 @@ public class ClientController {
     @PutMapping("{id}")
     public ResponseEntity<?> update(@PathVariable long id, @Valid @RequestBody ClientDto clientDto) {
         ClientDto updatedClient = clientService.update(id, clientDto);
+
+        URI uri = MvcUriComponentsBuilder.fromController(getClass())
+                .path("/{id}")
+                .build(updatedClient.getId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .location(uri)
+                .body(updatedClient);
+    }
+
+    @PostMapping(value = "/{id}/addCoach")
+    public ResponseEntity<?> addCoach(@PathVariable long id, @Valid @RequestBody UserDtoRequest coachRequest) {
+        ClientDto updatedClient = clientService.addCoach(id, coachRequest);
+
+        URI uri = MvcUriComponentsBuilder.fromController(getClass())
+                .path("/{id}")
+                .build(updatedClient.getId());
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .location(uri)
+                .body(updatedClient);
+    }
+
+    @PostMapping(value = "/{id}/removeCoach")
+    public ResponseEntity<?> removeCoach(@PathVariable long id) {
+        ClientDto updatedClient = clientService.removeCoach(id);
 
         URI uri = MvcUriComponentsBuilder.fromController(getClass())
                 .path("/{id}")
