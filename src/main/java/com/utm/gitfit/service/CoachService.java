@@ -38,7 +38,7 @@ public class CoachService {
 
     @Transactional
     public CoachDto save(CoachDto coachDto) {
-        return coachToDto(coachRepository.save(mapToEntity.apply(coachDto)));
+        return coachToDto(coachRepository.save(coachToEntity(coachDto)));
     }
 
     @Transactional
@@ -53,7 +53,7 @@ public class CoachService {
         repoCoach.setBirthday(coachDto.getBirthday());
         repoCoach.setBankAccountId(coachDto.getBankAccountId());
 
-        return coachToDto(repoCoach);
+        return saveEntity(repoCoach);
     }
 
     @Transactional
@@ -68,7 +68,7 @@ public class CoachService {
             repoCoach.getClients().add(findClientByIdAndFullName(clientRequest));
         }
 
-        return coachToDto(repoCoach);
+        return saveEntity(repoCoach);
     }
 
     @Transactional
@@ -83,7 +83,11 @@ public class CoachService {
             repoCoach.getClients().remove(findClientByIdAndFullName(clientRequest));
         }
 
-        return coachToDto(repoCoach);
+        return saveEntity(repoCoach);
+    }
+
+    private CoachDto saveEntity(Coach coach) {
+        return save(coachToDto(coach));
     }
 
     private Client findClientByIdAndFullName(UserDtoRequest clientRequest) {
@@ -97,5 +101,9 @@ public class CoachService {
 
     private CoachDto coachToDto(Coach coach) {
         return mapToDto.apply(coach);
+    }
+
+    private Coach coachToEntity(CoachDto coachDto) {
+        return mapToEntity.apply(coachDto);
     }
 }

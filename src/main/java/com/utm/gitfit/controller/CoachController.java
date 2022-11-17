@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +34,7 @@ public class CoachController {
         return coachService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping(value = "/save")
     public ResponseEntity<?> create(@Valid @RequestBody CoachDto coachDto) {
         CoachDto savedCoach = coachService.save(coachDto);
 
@@ -48,7 +47,7 @@ public class CoachController {
                 .body(savedCoach);
     }
 
-    @PutMapping("{id}")
+    @PostMapping("/save/{id}")
     public ResponseEntity<?> update(@PathVariable long id, @Valid @RequestBody CoachDto coachDto) {
         CoachDto updatedCoach = coachService.update(id, coachDto);
 
