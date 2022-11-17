@@ -3,7 +3,6 @@ package com.utm.gitfit.service;
 import com.utm.gitfit.dto.ClientDto;
 import com.utm.gitfit.dto.UserDtoRequest;
 import com.utm.gitfit.exception.EntityNotFoundException;
-import com.utm.gitfit.mapper.TraineeInfoMapper;
 import com.utm.gitfit.model.Client;
 import com.utm.gitfit.model.Coach;
 import com.utm.gitfit.repository.ClientRepository;
@@ -23,6 +22,7 @@ import static com.utm.gitfit.mapper.ClientMapper.mapToEntity;
 public class ClientService {
     private final ClientRepository clientRepository;
     private final CoachRepository coachRepository;
+    private final TraineeInfoService traineeInfoService;
 
     @Transactional(readOnly = true)
     public List<ClientDto> findAll() {
@@ -38,7 +38,13 @@ public class ClientService {
 
     @Transactional
     public ClientDto save(ClientDto clientDto) {
-        return clientToDto(clientRepository.save(mapToEntity.apply(clientDto)));
+        Client clientEntity = clientToEntity(clientDto);
+        clientEntity.setTraineeInfo(
+                traineeInfoService.save(clientDto.getTraineeInfo()
+                        , clientEntity)
+        );
+
+        return clientToDto(clientRepository.save(clientEntity));
     }
 
     @Transactional
@@ -52,9 +58,12 @@ public class ClientService {
         repoClient.setPassword(clientDto.getPassword());
         repoClient.setBirthday(clientDto.getBirthday());
         repoClient.setBankAccountId(clientDto.getBankAccountId());
-        repoClient.setTraineeInfo(TraineeInfoMapper.mapToEntity.apply(clientDto.getTraineeInfo()));
 
-        return clientToDto(repoClient);
+        repoClient.setTraineeInfo(
+                traineeInfoService.update(clientDto.getTraineeInfo())
+        );
+
+        return saveEntity(repoClient);
     }
 
     @Transactional
@@ -63,7 +72,7 @@ public class ClientService {
 
         repoClient.setCoach(findCoachByIdAndFullName(coachRequest));
 
-        return clientToDto(repoClient);
+        return saveEntity(repoClient);
     }
 
     @Transactional
@@ -74,7 +83,11 @@ public class ClientService {
             throw new EntityNotFoundException("Client with id: " + repoClient.getId() + ", does not have a coach to remove.");
         }
 
-        return clientToDto(repoClient);
+        return saveEntity(repoClient);
+    }
+
+    private ClientDto saveEntity(Client client) {
+        return save(clientToDto(client));
     }
 
     private Coach findCoachByIdAndFullName(UserDtoRequest coachRequest) {
@@ -88,5 +101,9 @@ public class ClientService {
 
     private ClientDto clientToDto(Client client) {
         return mapToDto.apply(client);
+    }
+
+    private Client clientToEntity(ClientDto clientDto) {
+        return mapToEntity.apply(clientDto);
     }
 }

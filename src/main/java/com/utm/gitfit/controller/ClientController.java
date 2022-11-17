@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +34,7 @@ public class ClientController {
         return clientService.findById(id);
     }
 
-    @PostMapping
+    @PostMapping(value = "/save")
     public ResponseEntity<?> create(@Valid @RequestBody ClientDto clientDto) {
         ClientDto savedClient = clientService.save(clientDto);
 
@@ -48,7 +47,7 @@ public class ClientController {
                 .body(savedClient);
     }
 
-    @PutMapping("{id}")
+    @PostMapping("/save/{id}")
     public ResponseEntity<?> update(@PathVariable long id, @Valid @RequestBody ClientDto clientDto) {
         ClientDto updatedClient = clientService.update(id, clientDto);
 
