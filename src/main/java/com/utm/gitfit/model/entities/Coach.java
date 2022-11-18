@@ -1,6 +1,5 @@
-package com.utm.gitfit.model;
+package com.utm.gitfit.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -9,32 +8,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
 import java.time.LocalDate;
+import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 @Getter
 @Setter
 @Builder
 @ToString
 @Entity
-@Table(name = "client")
+@Table(name = "coach")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Client {
+public class Coach {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -62,13 +60,8 @@ public class Client {
     @Column(name = "bank_account_id")
     private Long bankAccountId;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "coach_id", referencedColumnName = "id")
-    @JsonBackReference
-    @ToString.Exclude
-    private Coach coach;
-
-    @OneToOne(mappedBy = "client", cascade = ALL)
+    @OneToMany(mappedBy = "coach", cascade = ALL)
     @JsonManagedReference
-    private TraineeInfo traineeInfo;
+    @ToString.Exclude
+    private List<Client> clients;
 }

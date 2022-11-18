@@ -2,6 +2,7 @@ package com.utm.gitfit.controller;
 
 import com.utm.gitfit.dto.ClientDto;
 import com.utm.gitfit.dto.UserDtoRequest;
+import com.utm.gitfit.model.response.ClientResponse;
 import com.utm.gitfit.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,18 +26,18 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping
-    public List<ClientDto> findAll() {
+    public List<ClientResponse> findAll() {
         return clientService.findAll();
     }
 
     @GetMapping("{id}")
-    public ClientDto findById(@PathVariable long id) {
+    public ClientResponse findById(@PathVariable long id) {
         return clientService.findById(id);
     }
 
     @PostMapping(value = "/save")
     public ResponseEntity<?> create(@Valid @RequestBody ClientDto clientDto) {
-        ClientDto savedClient = clientService.save(clientDto);
+        ClientResponse savedClient = clientService.save(clientDto);
 
         URI uri = MvcUriComponentsBuilder.fromController(getClass())
                 .path("/{id}")
@@ -49,7 +50,7 @@ public class ClientController {
 
     @PostMapping("/save/{id}")
     public ResponseEntity<?> update(@PathVariable long id, @Valid @RequestBody ClientDto clientDto) {
-        ClientDto updatedClient = clientService.update(id, clientDto);
+        ClientResponse updatedClient = clientService.update(id, clientDto);
 
         URI uri = MvcUriComponentsBuilder.fromController(getClass())
                 .path("/{id}")
@@ -62,7 +63,7 @@ public class ClientController {
 
     @PostMapping(value = "/{id}/addCoach")
     public ResponseEntity<?> addCoach(@PathVariable long id, @Valid @RequestBody UserDtoRequest coachRequest) {
-        ClientDto updatedClient = clientService.addCoach(id, coachRequest);
+        ClientResponse updatedClient = clientService.addCoach(id, coachRequest);
 
         URI uri = MvcUriComponentsBuilder.fromController(getClass())
                 .path("/{id}")
@@ -75,7 +76,7 @@ public class ClientController {
 
     @PostMapping(value = "/{id}/removeCoach")
     public ResponseEntity<?> removeCoach(@PathVariable long id) {
-        ClientDto updatedClient = clientService.removeCoach(id);
+        ClientResponse updatedClient = clientService.removeCoach(id);
 
         URI uri = MvcUriComponentsBuilder.fromController(getClass())
                 .path("/{id}")
