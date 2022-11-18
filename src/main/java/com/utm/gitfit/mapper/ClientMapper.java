@@ -1,7 +1,7 @@
 package com.utm.gitfit.mapper;
 
 import com.utm.gitfit.dto.ClientDto;
-import com.utm.gitfit.model.Client;
+import com.utm.gitfit.model.entities.Client;
 import lombok.NoArgsConstructor;
 
 import java.util.function.Function;

@@ -2,9 +2,11 @@ package com.utm.gitfit.service;
 
 import com.utm.gitfit.dto.ClientDto;
 import com.utm.gitfit.dto.UserDtoRequest;
+import com.utm.gitfit.exception.EntityInvalidInputException;
 import com.utm.gitfit.exception.EntityNotFoundException;
-import com.utm.gitfit.model.Client;
-import com.utm.gitfit.model.Coach;
+import com.utm.gitfit.model.entities.Client;
+import com.utm.gitfit.model.entities.Coach;
+import com.utm.gitfit.model.response.ClientResponse;
 import com.utm.gitfit.repository.ClientRepository;
 import com.utm.gitfit.repository.CoachRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static com.utm.gitfit.mapper.ClientMapper.mapToDto;
 import static com.utm.gitfit.mapper.ClientMapper.mapToEntity;
+import static com.utm.gitfit.mapper.response.ClientResponseMapper.mapToResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -25,78 +28,89 @@ public class ClientService {
     private final TraineeInfoService traineeInfoService;
 
     @Transactional(readOnly = true)
-    public List<ClientDto> findAll() {
+    public List<ClientResponse> findAll() {
         List<Client> clientList = clientRepository.findAll();
 
-        return clientList.stream().map(mapToDto).collect(Collectors.toList());
+        return clientList.stream()
+                .map(mapToResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public ClientDto findById(Long id) {
-        return clientToDto(findClientById(id));
+    public ClientResponse findById(Long id) {
+        return clientToResponse(findClientById(id));
     }
 
     @Transactional
-    public ClientDto save(ClientDto clientDto) {
+    public ClientResponse save(ClientDto clientDto) {
         Client clientEntity = clientToEntity(clientDto);
         clientEntity.setTraineeInfo(
                 traineeInfoService.save(clientDto.getTraineeInfo()
                         , clientEntity)
         );
 
-        return clientToDto(clientRepository.save(clientEntity));
+        return clientToResponse(clientRepository.save(clientEntity));
     }
 
     @Transactional
-    public ClientDto update(long id, ClientDto clientDto) {
+    public ClientResponse update(long id, ClientDto clientDto) {
         Client repoClient = findClientById(id);
 
-        repoClient.setName(clientDto.getName());
-        repoClient.setLastName(clientDto.getLastName());
-        repoClient.setEmail(clientDto.getEmail());
-        repoClient.setUsername(clientDto.getUsername());
-        repoClient.setPassword(clientDto.getPassword());
-        repoClient.setBirthday(clientDto.getBirthday());
-        repoClient.setBankAccountId(clientDto.getBankAccountId());
+        repoClient.setName(clientDto.getName())
+                .setLastName(clientDto.getLastName())
+                .setEmail(clientDto.getEmail())
+                .setUsername(clientDto.getUsername())
+                .setPassword(clientDto.getPassword())
+                .setBirthday(clientDto.getBirthday())
+                .setBankAccountId(clientDto.getBankAccountId())
+                .setTraineeInfo(
+                        traineeInfoService.update(clientDto.getTraineeInfo())
+                );
 
-        repoClient.setTraineeInfo(
-                traineeInfoService.update(clientDto.getTraineeInfo())
-        );
-
-        return saveEntity(repoClient);
+        return saveToResponse(repoClient);
     }
 
     @Transactional
-    public ClientDto addCoach(long id, UserDtoRequest coachRequest) {
+    public ClientResponse addCoach(long id, UserDtoRequest coachRequest) {
         Client repoClient = findClientById(id);
+        Coach coach = findCoachByIdAndFullName(coachRequest);
+        List<Client> coachClients = coach.getClients();
 
-        repoClient.setCoach(findCoachByIdAndFullName(coachRequest));
+        if (coachClients.contains(repoClient))
+            throw new EntityInvalidInputException("Coach with id: " + coach.getId() + ", already has client " + repoClient.getId());
+        else {
+            coachClients.add(repoClient);
+            coach.setClients(coachClients);
+        }
 
-        return saveEntity(repoClient);
+        repoClient.setCoach(coach);
+        repoClient.setCoach(coachRepository.save(coach));
+        return saveToResponse(repoClient);
     }
 
     @Transactional
-    public ClientDto removeCoach(long id) {
+    public ClientResponse removeCoach(long id) {
         Client repoClient = findClientById(id);
 
         if (repoClient.getCoach() == null) {
             throw new EntityNotFoundException("Client with id: " + repoClient.getId() + ", does not have a coach to remove.");
         }
 
-        return saveEntity(repoClient);
+        repoClient.setCoach(null);
+        return saveToResponse(repoClient);
     }
 
-    private ClientDto saveEntity(Client client) {
-        return save(clientToDto(client));
+    private ClientResponse saveToResponse(Client client) {
+        return clientToResponse(clientRepository.save(client));
+    }
+
+    private Client findClientById(Long id) {
+        return clientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Client with id: " + id + " not found."));
     }
 
     private Coach findCoachByIdAndFullName(UserDtoRequest coachRequest) {
         return coachRepository.findByIdAndNameAndLastName(coachRequest.getId(), coachRequest.getName(), coachRequest.getLastName())
                 .orElseThrow(() -> new EntityNotFoundException("Coach: " + coachRequest + ", not found."));
-    }
-
-    private Client findClientById(Long id) {
-        return clientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Client with id: " + id + " not found."));
     }
 
     private ClientDto clientToDto(Client client) {
@@ -105,5 +119,9 @@ public class ClientService {
 
     private Client clientToEntity(ClientDto clientDto) {
         return mapToEntity.apply(clientDto);
+    }
+
+    private ClientResponse clientToResponse(Client client) {
+        return mapToResponse.apply(client);
     }
 }

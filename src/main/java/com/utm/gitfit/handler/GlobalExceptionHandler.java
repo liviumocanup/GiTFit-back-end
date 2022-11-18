@@ -1,5 +1,6 @@
 package com.utm.gitfit.handler;
 
+import com.utm.gitfit.exception.EntityInvalidInputException;
 import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.exception.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(HttpStatus.NOT_FOUND.value(),
                         ENTITY_NOT_FOUND,
+                        e.getMessage(),
+                        request.getServletPath()));
+    }
+
+    @ExceptionHandler(EntityInvalidInputException.class)
+    public ResponseEntity<ErrorResponse> onEntityInvalidInputException(HttpServletRequest request, EntityInvalidInputException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                        BAD_PARAMETER_VALUE,
                         e.getMessage(),
                         request.getServletPath()));
     }

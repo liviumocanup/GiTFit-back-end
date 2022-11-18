@@ -1,7 +1,7 @@
 package com.utm.gitfit.mapper;
 
 import com.utm.gitfit.dto.CardCredentialsDto;
-import com.utm.gitfit.model.CardCredentials;
+import com.utm.gitfit.model.entities.CardCredentials;
 import lombok.NoArgsConstructor;
 
 import java.util.function.Function;

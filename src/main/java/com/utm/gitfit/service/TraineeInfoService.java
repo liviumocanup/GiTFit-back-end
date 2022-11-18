@@ -2,8 +2,8 @@ package com.utm.gitfit.service;
 
 import com.utm.gitfit.dto.TraineeInfoDto;
 import com.utm.gitfit.exception.EntityNotFoundException;
-import com.utm.gitfit.model.Client;
-import com.utm.gitfit.model.TraineeInfo;
+import com.utm.gitfit.model.entities.Client;
+import com.utm.gitfit.model.entities.TraineeInfo;
 import com.utm.gitfit.repository.TraineeInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

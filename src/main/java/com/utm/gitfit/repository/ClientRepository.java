@@ -1,6 +1,6 @@
 package com.utm.gitfit.repository;
 
-import com.utm.gitfit.model.Client;
+import com.utm.gitfit.model.entities.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
