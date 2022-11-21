@@ -14,7 +14,8 @@ package com.utm.gitfit.client.api;
 
 import com.google.gson.reflect.TypeToken;
 import com.utm.gitfit.client.*;
-import com.utm.gitfit.client.model.*;
+import com.utm.gitfit.client.model.PaymentTokenRequestBody;
+import com.utm.gitfit.client.model.PaymentTokenResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

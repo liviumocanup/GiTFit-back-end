@@ -10,9 +10,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
+
+import java.io.IOException;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -25,7 +28,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(@NotNull final HttpServletRequest request, @NotNull final HttpServletResponse response, @NotNull final FilterChain filterChain) {
+    protected void doFilterInternal(@NotNull final HttpServletRequest request, @NotNull final HttpServletResponse response, @NotNull final FilterChain filterChain) throws ServletException, IOException {
         try {
             final var jwt = jwtUtils.parseJwt(request.getHeader(AUTHORIZATION));
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
@@ -39,5 +42,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("Cannot set user authentication: %s".formatted(e.getMessage()));
         }
+        filterChain.doFilter(request, response);
     }
 }

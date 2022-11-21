@@ -40,12 +40,12 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/api/v1/login").permitAll()
-                .antMatchers("/api/v1/register").permitAll()
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
+        http.headers().frameOptions().disable();
         return http.build();
     }
 

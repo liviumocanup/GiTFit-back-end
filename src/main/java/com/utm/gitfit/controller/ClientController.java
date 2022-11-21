@@ -1,7 +1,6 @@
 package com.utm.gitfit.controller;
 
 import com.utm.gitfit.dto.ClientDto;
-import com.utm.gitfit.dto.UserDtoRequest;
 import com.utm.gitfit.model.response.ClientResponse;
 import com.utm.gitfit.service.ClientService;
 import lombok.RequiredArgsConstructor;

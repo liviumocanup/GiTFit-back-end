@@ -14,7 +14,9 @@ package com.utm.gitfit.client.api;
 
 import com.google.gson.reflect.TypeToken;
 import com.utm.gitfit.client.*;
-import com.utm.gitfit.client.model.*;
+import com.utm.gitfit.client.model.PaymentsList;
+import com.utm.gitfit.client.model.RemovedPayment;
+import com.utm.gitfit.client.model.SinglePayment;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

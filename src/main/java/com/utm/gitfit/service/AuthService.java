@@ -5,6 +5,7 @@ import com.utm.gitfit.model.entities.Client;
 import com.utm.gitfit.model.entities.Coach;
 import com.utm.gitfit.model.entities.Role;
 import com.utm.gitfit.model.entities.User;
+import com.utm.gitfit.model.enums.ERole;
 import com.utm.gitfit.model.request.AppUserType;
 import com.utm.gitfit.model.request.LoginRequest;
 import com.utm.gitfit.model.request.RegistrationRequest;
@@ -51,8 +52,8 @@ public class AuthService {
     }
 
     @Transactional
-    public JwtResponse registerUser(RegistrationRequest registrationRequest) {
-        Role role = roleRepository.findByName(registrationRequest.userType().name())
+    public void registerUser(RegistrationRequest registrationRequest) {
+        Role role = roleRepository.findByName(ERole.valueOf(registrationRequest.userType().name()))
                 .orElseThrow();
         User user = registrationRequest.userType() == AppUserType.CLIENT ? new Client() : new Coach();
         user.setUserRole(role);
@@ -62,8 +63,7 @@ public class AuthService {
         user.setUsername(registrationRequest.username());
         user.setName(registrationRequest.firstName());
         user.setLastName(registrationRequest.surname());
-        userRepository.save(user);
 
-        return getJwtResponseForUserCredentials(user.getEmail(), user.getPassword());
+        userRepository.save(user);
     }
 }

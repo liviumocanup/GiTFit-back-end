@@ -25,7 +25,5 @@ public class ClientResponse {
 
     private Long bankAccountId;
 
-    private TraineeInfo traineeInfo;
-
     private Coach coach;
 }

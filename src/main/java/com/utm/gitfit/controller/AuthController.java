@@ -5,15 +5,15 @@ import com.utm.gitfit.model.request.RegistrationRequest;
 import com.utm.gitfit.model.response.JwtResponse;
 import com.utm.gitfit.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -24,7 +24,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JwtResponse> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest){
-        return ResponseEntity.ok(authService.registerUser(registrationRequest));
+    @ResponseStatus(HttpStatus.CREATED)
+    public void registerUser(@Valid @RequestBody RegistrationRequest registrationRequest){
+        authService.registerUser(registrationRequest);
     }
 }

@@ -43,7 +43,7 @@ public class CoachController {
                 .body(savedCoach);
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity<CoachResponse> update(@Valid @RequestBody CoachDto coachDto) {
         CoachResponse updatedCoach = coachService.update(coachDto);
 

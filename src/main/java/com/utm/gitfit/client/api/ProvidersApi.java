@@ -14,7 +14,8 @@ package com.utm.gitfit.client.api;
 
 import com.google.gson.reflect.TypeToken;
 import com.utm.gitfit.client.*;
-import com.utm.gitfit.client.model.*;
+import com.utm.gitfit.client.model.ProviderResponse;
+import com.utm.gitfit.client.model.ProvidersResponse;
 import org.threeten.bp.LocalDate;
 
 import java.io.IOException;
