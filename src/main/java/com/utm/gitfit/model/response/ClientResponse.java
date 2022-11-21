@@ -1,7 +1,6 @@
 package com.utm.gitfit.model.response;
 
 import com.utm.gitfit.model.entities.Coach;
-import com.utm.gitfit.model.entities.TraineeInfo;
 import lombok.Builder;
 import lombok.Data;
 

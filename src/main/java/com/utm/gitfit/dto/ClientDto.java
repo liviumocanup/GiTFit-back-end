@@ -24,6 +24,4 @@ public class ClientDto {
     private LocalDate birthday;
 
     private Long bankAccountId;
-
-    private TraineeInfoDto traineeInfo;
 }
