@@ -1,6 +1,6 @@
 package com.utm.gitfit.mapper;
 
-import com.utm.gitfit.dto.CoachDto;
+import com.utm.gitfit.model.dto.CoachDto;
 import com.utm.gitfit.model.entities.Coach;
 import com.utm.gitfit.model.response.CoachResponse;
 import org.mapstruct.Mapper;

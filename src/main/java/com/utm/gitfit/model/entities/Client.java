@@ -1,24 +1,30 @@
 package com.utm.gitfit.model.entities;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import static javax.persistence.FetchType.LAZY;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "client")
 public class Client extends User{
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "coach_id", referencedColumnName = "id")
-    private Coach coach;
+    @ManyToMany
+    @JoinTable(name = "client_coach",
+            joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "coach_id"))
+    private Set<Coach> coaches = new HashSet<>();
+
+    @Override
+    public void addConnection(User user) {
+        coaches.add((Coach) user);
+    }
 }

@@ -4,10 +4,9 @@ import com.utm.gitfit.model.enums.ERole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
-
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -16,20 +15,11 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "roles",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "name")})
-public class Role {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class Role extends AbstractPersistable<Long> {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private ERole name;
-
-    public Role(ERole name) {
-        this.name = name;
-    }
 
     public ERole getName() {
         return name;
@@ -37,5 +27,15 @@ public class Role {
 
     public void setName(ERole name) {
         this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }
