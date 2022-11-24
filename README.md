@@ -37,4 +37,6 @@ Technologies: Spring Boot with Maven and MySql Database.
 
 13. For checking if project works you can do a get request in postman using: http://localhost:8080/clients/save
 
+14. For checking swagger documentation you need to go : http://localhost:8080/swagger-ui/index.html#/
+
 ### It should work now, and will be on while the command line is open.
