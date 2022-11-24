@@ -23,6 +23,9 @@ public class Client extends User{
             joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "coach_id"))
     private Set<Coach> coaches = new HashSet<>();
 
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private Set<ScheduledSession> scheduledSessions;
+
     @Override
     public void addConnection(User user) {
         coaches.add((Coach) user);
