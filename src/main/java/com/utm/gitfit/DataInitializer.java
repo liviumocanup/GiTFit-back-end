@@ -18,17 +18,19 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Role clientRole = new Role();
-        clientRole.setName(ERole.CLIENT);
+        if (roleRepository.count() == 0) {
+            Role clientRole = new Role();
+            clientRole.setName(ERole.CLIENT);
 
-        Role adminRole = new Role();
-        adminRole.setName(ERole.ADMIN);
+            Role adminRole = new Role();
+            adminRole.setName(ERole.ADMIN);
 
-        Role coachRole = new Role();
-        coachRole.setName(ERole.COACH);
+            Role coachRole = new Role();
+            coachRole.setName(ERole.COACH);
 
-        roleRepository.save(clientRole);
-        roleRepository.save(coachRole);
-        roleRepository.save(adminRole);
+            roleRepository.save(clientRole);
+            roleRepository.save(coachRole);
+            roleRepository.save(adminRole);
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.utm.gitfit.service;
 
-import com.utm.gitfit.dto.CoachDto;
 import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.mapper.CoachMapper;
 import com.utm.gitfit.model.entities.Coach;
@@ -27,25 +26,6 @@ public class CoachService {
     @Transactional(readOnly = true)
     public CoachResponse findById(Long id) {
         return coachMapper.mapEntityToResponse(getById(id));
-    }
-
-    @Transactional
-    public CoachResponse save(CoachDto coachDto) {
-        Coach coach = coachMapper.mapDtoToEntity(coachDto);
-        return coachMapper.mapEntityToResponse(coachRepository.save(coach));
-    }
-
-    @Transactional
-    public CoachResponse update(CoachDto coachDto) {
-        Coach repoCoach = getById(coachDto.getId());
-
-        repoCoach.setName(coachDto.getName())
-                .setLastName(coachDto.getLastName())
-                .setEmail(coachDto.getEmail())
-                .setUsername(coachDto.getUsername())
-                .setPassword(coachDto.getPassword())
-                .setBirthday(coachDto.getBirthday());
-        return coachMapper.mapEntityToResponse(coachRepository.save(repoCoach));
     }
 
     private Coach getById(Long id) {

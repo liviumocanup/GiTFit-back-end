@@ -1,6 +1,5 @@
 package com.utm.gitfit.service;
 
-import com.utm.gitfit.dto.ClientDto;
 import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.mapper.ClientMapper;
 import com.utm.gitfit.model.entities.Client;
@@ -28,27 +27,6 @@ public class ClientService {
     @Transactional(readOnly = true)
     public ClientResponse findById(Long id) {
         return clientMapper.mapEntityToResponse(getById(id));
-    }
-
-    @Transactional
-    public ClientResponse save(ClientDto clientDto) {
-        Client clientEntity = clientMapper.mapDtoToEntity(clientDto);
-
-        return clientMapper.mapEntityToResponse(clientRepository.save(clientEntity));
-    }
-
-    @Transactional
-    public ClientResponse update(ClientDto clientDto) {
-        Client repoClient = getById(clientDto.getId());
-
-        repoClient.setName(clientDto.getName())
-                .setLastName(clientDto.getLastName())
-                .setEmail(clientDto.getEmail())
-                .setUsername(clientDto.getUsername())
-                .setPassword(clientDto.getPassword())
-                .setBirthday(clientDto.getBirthday());
-
-        return clientMapper.mapEntityToResponse(clientRepository.save(repoClient));
     }
 
     private Client getById(Long id) {

@@ -3,12 +3,12 @@ package com.utm.gitfit.model.entities;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "gitfit_user",
@@ -18,12 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Accessors(chain = true)
 @Getter
 @Setter
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public abstract class User extends AbstractPersistable<Long> {
 
     @Column(name = "name")
     private String name;
@@ -42,7 +37,7 @@ public class User {
 
     @OneToOne
     @JoinColumn(name = "bank_account_id", referencedColumnName = "id")
-    private BankAccount bankAccount;
+    private BillingDetails billingDetails;
 
     @Column(name = "password")
     @Size(max = 120)
@@ -53,4 +48,16 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Role userRole;
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+
+    public abstract void addConnection(User user);
 }

@@ -53,7 +53,7 @@ public class AuthService {
 
     @Transactional
     public void registerUser(RegistrationRequest registrationRequest) {
-        Role role = roleRepository.findByName(ERole.valueOf(registrationRequest.userType().name()))
+        final Role role = roleRepository.findByName(ERole.valueOf(registrationRequest.userType().name()))
                 .orElseThrow();
         User user = registrationRequest.userType() == AppUserType.CLIENT ? new Client() : new Coach();
         user.setUserRole(role);

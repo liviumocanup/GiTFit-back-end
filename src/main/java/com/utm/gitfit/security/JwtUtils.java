@@ -4,10 +4,12 @@ import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -18,10 +20,16 @@ public class JwtUtils {
     @Value("${gitfit.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
+    public static final String AUTHORITIES_CLAIM = "roles";
+
     public String generateJwtToken(final Authentication authentication) {
         final var userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
+                .claim(AUTHORITIES_CLAIM, authorities)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

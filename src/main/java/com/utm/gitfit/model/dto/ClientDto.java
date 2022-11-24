@@ -1,4 +1,4 @@
-package com.utm.gitfit.dto;
+package com.utm.gitfit.model.dto;
 
 import lombok.Builder;
 import lombok.Data;

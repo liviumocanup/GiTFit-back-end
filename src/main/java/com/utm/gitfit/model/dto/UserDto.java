@@ -1,10 +1,9 @@
-package com.utm.gitfit.dto;
+package com.utm.gitfit.model.dto;
 
 import lombok.Data;
 
 @Data
-public class UserDtoRequest {
-    private Long id;
+public class UserDto {
 
     private String name;
 
