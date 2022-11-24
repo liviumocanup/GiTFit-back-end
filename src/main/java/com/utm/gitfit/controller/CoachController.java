@@ -2,12 +2,14 @@ package com.utm.gitfit.controller;
 
 import com.utm.gitfit.dto.CoachDto;
 import com.utm.gitfit.model.response.CoachResponse;
+import com.utm.gitfit.service.ClientService;
 import com.utm.gitfit.service.CoachService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,33 +23,31 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/coach")
-@Api(value = "Coach API")
 public class CoachController {
 
     private final CoachService coachService;
 
     @GetMapping
-    @ApiOperation(value = "Get all coaches", notes = "Returns all coaches with their ID and personal data")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The coaches were retrieved successfully"),
-            @ApiResponse(code = 404, message = "Not found - coaches not found")
-    })
     public List<CoachResponse> findAll() {
         return coachService.findAll();
     }
 
+//    @Operation(summary = "Get a coach by their id")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Found the coach",
+//                    content = {@Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = CoachService.class))}),
+//            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
+//                    content = @Content),
+//            @ApiResponse(responseCode = "404", description = "Coach not found",
+//                    content = @Content)})
     @GetMapping("{id}")
-    @ApiOperation(value = "Get a coach by ID", notes = "Returns the coach with specified ID and their personal data")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The coach was retrieved successfully"),
-            @ApiResponse(code = 404, message = "Not found - coach not found")
-    })
-    public CoachResponse findById(@PathVariable @ApiParam(name = "id", value = "coach's id") long id) {
+    public CoachResponse findById(//@Parameter(description = "id of coach to be searched")
+                                  @PathVariable long id) {
         return coachService.findById(id);
     }
 
     @PostMapping
-    @ApiOperation(value = "Saves coach", notes = "Coaches are initialized without any clients")
     public ResponseEntity<CoachResponse> create(@Valid @RequestBody CoachDto coachDto) {
         CoachResponse savedCoach = coachService.save(coachDto);
 
@@ -61,7 +61,6 @@ public class CoachController {
     }
 
     @PutMapping
-    @ApiOperation(value = "Updates coach", notes = "Update the coach with new information")
     public ResponseEntity<CoachResponse> update(@Valid @RequestBody CoachDto coachDto) {
         CoachResponse updatedCoach = coachService.update(coachDto);
 

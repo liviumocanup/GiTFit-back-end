@@ -42,11 +42,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/**").permitAll()
-//                .antMatchers("/swagger-ui.html").permitAll()
-//                .antMatchers("/swagger-resources/**").permitAll()
-//                .antMatchers("/v1/v2/api-docs").permitAll()
-//                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/swagger-ui/**","/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
