@@ -2,14 +2,7 @@ package com.utm.gitfit.controller;
 
 import com.utm.gitfit.dto.CoachDto;
 import com.utm.gitfit.model.response.CoachResponse;
-import com.utm.gitfit.service.ClientService;
 import com.utm.gitfit.service.CoachService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,18 +25,8 @@ public class CoachController {
         return coachService.findAll();
     }
 
-//    @Operation(summary = "Get a coach by their id")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Found the coach",
-//                    content = {@Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = CoachService.class))}),
-//            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-//                    content = @Content),
-//            @ApiResponse(responseCode = "404", description = "Coach not found",
-//                    content = @Content)})
     @GetMapping("{id}")
-    public CoachResponse findById(//@Parameter(description = "id of coach to be searched")
-                                  @PathVariable long id) {
+    public CoachResponse findById(@PathVariable long id) {
         return coachService.findById(id);
     }
 

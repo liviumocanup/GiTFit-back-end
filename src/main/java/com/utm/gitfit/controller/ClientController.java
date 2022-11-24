@@ -3,12 +3,6 @@ package com.utm.gitfit.controller;
 import com.utm.gitfit.dto.ClientDto;
 import com.utm.gitfit.model.response.ClientResponse;
 import com.utm.gitfit.service.ClientService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,18 +25,8 @@ public class ClientController {
         return clientService.findAll();
     }
 
-//    @Operation(summary = "Get a client by their id")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Found the client",
-//                    content = {@Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = ClientService.class))}),
-//            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-//                    content = @Content),
-//            @ApiResponse(responseCode = "404", description = "Client not found",
-//                    content = @Content)})
     @GetMapping("/{id}")
-    public ClientResponse findById(//@Parameter(description = "id of client to be searched")
-                                   @PathVariable long id) {
+    public ClientResponse findById(@PathVariable long id) {
         return clientService.findById(id);
     }
 
