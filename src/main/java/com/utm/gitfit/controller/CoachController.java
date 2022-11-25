@@ -1,8 +1,8 @@
 package com.utm.gitfit.controller;
 
+import com.utm.gitfit.model.client.ApiException;
 import com.utm.gitfit.model.entities.ScheduledSession;
 import com.utm.gitfit.model.request.ScheduleRequest;
-import com.utm.gitfit.model.response.CoachResponse;
 import com.utm.gitfit.service.CoachService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class CoachController {
     private final CoachService coachService;
 
     @PostMapping("/schedule")
-    public void scheduleSession(@RequestBody ScheduleRequest scheduleRequest){
+    public void scheduleSession(@RequestBody ScheduleRequest scheduleRequest) throws ApiException {
         coachService.scheduleSession(scheduleRequest);
     }
 

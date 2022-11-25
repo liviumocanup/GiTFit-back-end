@@ -1,10 +1,13 @@
 package com.utm.gitfit.service;
 
-import com.utm.gitfit.model.client.ApiException;
-import com.utm.gitfit.model.client.api.PayWithConnectApi;
 import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.mapper.CoachMapper;
-import com.utm.gitfit.model.client.model.*;
+import com.utm.gitfit.model.client.ApiException;
+import com.utm.gitfit.model.client.api.PayWithConnectApi;
+import com.utm.gitfit.model.client.model.PaymentTokenRequestBody;
+import com.utm.gitfit.model.client.model.PaymentTokenRequestBodyData;
+import com.utm.gitfit.model.client.model.PaymentTokenResponse;
+import com.utm.gitfit.model.client.model.SEPAPaymentAttributes;
 import com.utm.gitfit.model.entities.*;
 import com.utm.gitfit.model.request.ScheduleRequest;
 import com.utm.gitfit.model.response.CoachResponse;

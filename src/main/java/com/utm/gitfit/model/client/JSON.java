@@ -16,7 +16,6 @@ import com.google.gson.*;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import com.utm.gitfit.client.model.*;
 import com.utm.gitfit.model.client.model.*;
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.PostProcessor;

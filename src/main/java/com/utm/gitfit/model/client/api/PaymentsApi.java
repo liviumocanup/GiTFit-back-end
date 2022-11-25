@@ -13,7 +13,6 @@
 package com.utm.gitfit.model.client.api;
 
 import com.google.gson.reflect.TypeToken;
-import com.utm.gitfit.client.*;
 import com.utm.gitfit.model.client.*;
 import com.utm.gitfit.model.client.model.PaymentsList;
 import com.utm.gitfit.model.client.model.RemovedPayment;
