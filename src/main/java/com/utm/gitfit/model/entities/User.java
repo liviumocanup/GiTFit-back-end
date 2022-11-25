@@ -49,7 +49,7 @@ public abstract class User extends AbstractPersistable<Long> {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Role userRole;
 
-    private Long saltEdgeIdentifier;
+    private String saltEdgeIdentifier;
 
     @Override
     public int hashCode() {

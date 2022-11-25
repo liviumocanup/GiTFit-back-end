@@ -19,7 +19,7 @@ public class ScheduledSession extends AbstractPersistable<Long> {
     @ManyToOne
     private Client client;
 
-    private LocalDateTime localDateTime;
+    private LocalDateTime dateAndTime;
 
     private Integer duration;
 }
