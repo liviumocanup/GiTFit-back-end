@@ -24,7 +24,7 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2022-11-21T15:13:42.040Z[GMT]")
 public class Customer {
   @SerializedName("id")
-  private Integer id = null;
+  private String id = null;
 
   @SerializedName("identifier")
   private String identifier = null;
@@ -38,7 +38,7 @@ public class Customer {
   @SerializedName("updated_at")
   private OffsetDateTime updatedAt = null;
 
-  public Customer id(Integer id) {
+  public Customer id(String id) {
     this.id = id;
     return this;
   }
@@ -48,11 +48,11 @@ public class Customer {
    * @return id
   **/
   @Schema(required = true, description = "Creates a customer, returning the customer object.")
-  public Integer getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Integer id) {
+  public void setId(String id) {
     this.id = id;
   }
 

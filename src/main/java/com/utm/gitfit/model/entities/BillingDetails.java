@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Builder
 @ToString
 @Entity
-@Table(name = "bank_account")
+@Table(name = "billing_details")
 public class BillingDetails extends AbstractPersistable<Long> {
 
     private String town;

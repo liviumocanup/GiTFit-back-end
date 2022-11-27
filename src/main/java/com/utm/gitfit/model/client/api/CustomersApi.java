@@ -3,6 +3,7 @@ package com.utm.gitfit.model.client.api;
 import com.google.gson.reflect.TypeToken;
 import com.utm.gitfit.model.client.*;
 import com.utm.gitfit.model.client.model.*;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -11,13 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class CustomersApi {
 
-    private ApiClient apiClient;
-
-    public CustomersApi() {
-        this(Configuration.getDefaultApiClient());
-    }
+    private final ApiClient apiClient;
 
     public CustomersApi(ApiClient apiClient) {
         this.apiClient = apiClient;
@@ -25,10 +23,6 @@ public class CustomersApi {
 
     public ApiClient getApiClient() {
         return apiClient;
-    }
-
-    public void setApiClient(ApiClient apiClient) {
-        this.apiClient = apiClient;
     }
 
     /**

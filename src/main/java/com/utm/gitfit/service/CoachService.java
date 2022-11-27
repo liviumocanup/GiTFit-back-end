@@ -8,6 +8,7 @@ import com.utm.gitfit.model.client.model.PaymentTokenRequestBody;
 import com.utm.gitfit.model.client.model.PaymentTokenRequestBodyData;
 import com.utm.gitfit.model.client.model.PaymentTokenResponse;
 import com.utm.gitfit.model.client.model.SEPAPaymentAttributes;
+import com.utm.gitfit.model.dto.CoachDetailsDto;
 import com.utm.gitfit.model.entities.*;
 import com.utm.gitfit.model.request.ScheduleRequest;
 import com.utm.gitfit.model.response.CoachResponse;
@@ -58,10 +59,10 @@ public class CoachService {
         scheduledSession.setDateAndTime(scheduleRequest.date());
         scheduledSessionRepository.save(scheduledSession);
 
-        return processSessionPayment(price, client, coach);
+        return processSessionPayment(price, client);
     }
 
-    private PaymentTokenResponse processSessionPayment(Double price, Client client, Coach coach) throws ApiException {
+    private PaymentTokenResponse processSessionPayment(Double price, Client client) throws ApiException {
         PaymentTokenRequestBody paymentRequestBody = new PaymentTokenRequestBody();
         PaymentTokenRequestBodyData paymentTokenRequestBodyData = new PaymentTokenRequestBodyData();
         paymentTokenRequestBodyData.setCustomerId(client.getSaltEdgeIdentifier());
@@ -89,6 +90,7 @@ public class CoachService {
         sepaPaymentAttributes.setCreditorName(user.getName());
         sepaPaymentAttributes.setCustomerIpAddress("10.0.0.1");
         sepaPaymentAttributes.setReference("p:131313131313131313");
+        sepaPaymentAttributes.setDescription("description");
         sepaPaymentAttributes.setEndToEndId("#123123123");
 
         return sepaPaymentAttributes;
@@ -97,5 +99,13 @@ public class CoachService {
     @Transactional(readOnly = true)
     public List<ScheduledSession> getAllScheduledSessionsByDate(LocalDate date) {
         return null;
+    }
+
+    public void addCoachDetails(CoachDetailsDto coachDetailsDto) {
+        Coach coach = (Coach) userService.getCurrentUser();
+        coach.setGymAddress(coach.getGymAddress());
+        coach.setAboutMe(coachDetailsDto.aboutMe());
+        coach.setRatePerHour(coachDetailsDto.ratePerHour());
+        userService.save(coach);
     }
 }

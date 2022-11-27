@@ -71,4 +71,8 @@ public class UserService {
             userRepository.save(sendingUser);
         }
     }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }

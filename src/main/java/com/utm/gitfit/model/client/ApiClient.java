@@ -85,8 +85,8 @@ public class ApiClient {
     /*
      * Constructor for ApiClient
      */
-    public ApiClient(@Value("salt_edge.appId") String appId,
-                     @Value("salt_edge.secret") String apiSecret) {
+    public ApiClient(@Value("${salt_edge.apiId}") String appId,
+                     @Value("${salt_edge.secret}") String apiSecret) {
         this.appId = appId;
         this.apiSecret = apiSecret;
         httpClient = new OkHttpClient();
