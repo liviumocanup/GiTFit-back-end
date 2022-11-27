@@ -35,7 +35,7 @@ public abstract class User extends AbstractPersistable<Long> {
     @Column(name = "birthday")
     private LocalDate birthday;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "bank_account_id", referencedColumnName = "id")
     private BillingDetails billingDetails;
 

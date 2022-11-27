@@ -1,6 +1,11 @@
 package com.utm.gitfit.service;
 
 
+import com.utm.gitfit.model.client.ApiException;
+import com.utm.gitfit.model.client.api.CustomersApi;
+import com.utm.gitfit.model.client.model.CreatedCustomerResponse;
+import com.utm.gitfit.model.client.model.CustomerRequestBody;
+import com.utm.gitfit.model.client.model.CustomerRequestBodyData;
 import com.utm.gitfit.model.entities.Client;
 import com.utm.gitfit.model.entities.Coach;
 import com.utm.gitfit.model.entities.Role;
@@ -32,6 +37,7 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CustomersApi customersApi;
 
     @Transactional(readOnly = true)
     public JwtResponse authenticateUser(final LoginRequest loginRequest) {
@@ -52,10 +58,10 @@ public class AuthService {
     }
 
     @Transactional
-    public void registerUser(RegistrationRequest registrationRequest) {
+    public void registerUser(RegistrationRequest registrationRequest) throws ApiException {
         final Role role = roleRepository.findByName(ERole.valueOf(registrationRequest.userType().name()))
                 .orElseThrow();
-        User user = registrationRequest.userType() == AppUserType.CLIENT ? new Client() : new Coach();
+        final User user = registrationRequest.userType() == AppUserType.CLIENT ? new Client() : new Coach();
         user.setUserRole(role);
         user.setPassword(passwordEncoder.encode(registrationRequest.password()));
         user.setEmail(registrationRequest.email());
@@ -63,7 +69,18 @@ public class AuthService {
         user.setUsername(registrationRequest.username());
         user.setName(registrationRequest.firstName());
         user.setLastName(registrationRequest.surname());
+        final var customerResponse = createSaltEdgeCustomer(user.getEmail());
+        user.setSaltEdgeIdentifier(customerResponse.getData().getId());
 
         userRepository.save(user);
+    }
+
+    private CreatedCustomerResponse createSaltEdgeCustomer(final String email) throws ApiException {
+        final var customerRequestBody = new CustomerRequestBody();
+        final var customerRequestBodyData = new CustomerRequestBodyData();
+        customerRequestBodyData.setIdentifier(email);
+        customerRequestBody.setData(customerRequestBodyData);
+
+        return customersApi.customersPost(customerRequestBody);
     }
 }

@@ -25,6 +25,8 @@ public class BillingDetailsService {
         BillingDetails billingDetails = billingDetailsMapper.map(billingDetailsDto);
         User user = userService.getCurrentUser();
         billingDetails.setUser(user);
-        return billingDetailsMapper.map(billingDetailsRepository.save(billingDetails));
+        user.setBillingDetails(billingDetails);
+        User savedUser = userService.save(user);
+        return billingDetailsMapper.map(savedUser.getBillingDetails());
     }
 }
