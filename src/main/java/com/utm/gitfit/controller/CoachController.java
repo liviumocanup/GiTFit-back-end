@@ -1,30 +1,30 @@
 package com.utm.gitfit.controller;
 
-import com.utm.gitfit.model.response.CoachResponse;
+import com.utm.gitfit.model.client.ApiException;
+import com.utm.gitfit.model.entities.ScheduledSession;
+import com.utm.gitfit.model.request.ScheduleRequest;
 import com.utm.gitfit.service.CoachService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/coach")
+@RequestMapping("/user/coach/")
 public class CoachController {
 
     private final CoachService coachService;
 
-    @GetMapping
-    public List<CoachResponse> findAll() {
-        return coachService.findAll();
+    @PostMapping("/schedule")
+    public void scheduleSession(@RequestBody ScheduleRequest scheduleRequest) throws ApiException {
+        coachService.scheduleSession(scheduleRequest);
     }
 
-    @GetMapping("{id}")
-    public CoachResponse findById(@PathVariable long id) {
-        return coachService.findById(id);
+    @GetMapping("/schedule")
+    public List<ScheduledSession> getAllScheduledSessionsByDate(@RequestParam LocalDate date){
+        return coachService.getAllScheduledSessionsByDate(date);
     }
 
 }

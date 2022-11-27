@@ -2,9 +2,7 @@ package com.utm.gitfit.model.entities;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +17,15 @@ public class Coach extends User{
 
     @ManyToMany(mappedBy = "coaches")
     private Set<Client> clients = new HashSet<>();
+
+    @OneToMany(mappedBy = "coach", cascade = CascadeType.ALL)
+    private Set<ScheduledSession> scheduledSessions;
+
+    private Double ratePerHour;
+
+    private String gymAddress;
+
+    private String aboutMe;
 
     @Override
     public void addConnection(User user) {

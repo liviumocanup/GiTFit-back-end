@@ -5,7 +5,7 @@ import com.utm.gitfit.mapper.BillingDetailsMapper;
 import com.utm.gitfit.model.dto.BillingDetailsDto;
 import com.utm.gitfit.model.entities.BillingDetails;
 import com.utm.gitfit.model.entities.User;
-import com.utm.gitfit.repository.BankAccountRepository;
+import com.utm.gitfit.repository.BillingDetailsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,18 +13,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BillingDetailsService {
 
-    private final BankAccountRepository bankAccountRepository;
+    private final BillingDetailsRepository billingDetailsRepository;
     private final BillingDetailsMapper billingDetailsMapper;
     private final UserService userService;
 
     private BillingDetails getById(Long id) {
-        return bankAccountRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("BankAccount with id: " + id + " not found."));
+        return billingDetailsRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("BankAccount with id: " + id + " not found."));
     }
 
     public BillingDetailsDto save(BillingDetailsDto billingDetailsDto) {
         BillingDetails billingDetails = billingDetailsMapper.map(billingDetailsDto);
         User user = userService.getCurrentUser();
         billingDetails.setUser(user);
-        return billingDetailsMapper.map(bankAccountRepository.save(billingDetails));
+        return billingDetailsMapper.map(billingDetailsRepository.save(billingDetails));
     }
 }
