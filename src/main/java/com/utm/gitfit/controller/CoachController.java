@@ -5,7 +5,7 @@ import com.utm.gitfit.model.client.model.PaymentTokenResponse;
 import com.utm.gitfit.model.dto.CoachDetailsDto;
 import com.utm.gitfit.model.entities.ScheduledSession;
 import com.utm.gitfit.model.request.ScheduleRequest;
-import com.utm.gitfit.service.CoachService;
+import com.utm.gitfit.service.CoachServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("/user/coach/")
 public class CoachController {
 
-    private final CoachService coachService;
+    private final CoachServiceImpl coachService;
 
     @PostMapping("/schedule")
     public PaymentTokenResponse scheduleSession(@RequestBody ScheduleRequest scheduleRequest) throws ApiException {
