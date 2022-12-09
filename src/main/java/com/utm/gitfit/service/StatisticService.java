@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StatisticService {
-    private final ClientService clientService;
+    private final UserService userService;
     private final SuggestionService suggestionService;
     private final StatisticRepository statisticRepository;
     private final StatisticMapper statisticMapper;
@@ -48,7 +48,7 @@ public class StatisticService {
 
         Statistic repoStatistic = persist(client, statistic);
         client.getStatistics().add(repoStatistic);
-        clientService.save(client);
+        userService.save(client);
 
         return statisticMapper.mapEntityToResponse(repoStatistic);
     }
@@ -62,7 +62,7 @@ public class StatisticService {
         Suggestion suggestion = suggestionService.create(repoStat, suggestionRequest);
         repoStat.getSuggestions().add(suggestion);
         client.getStatistics().add(repoStat);
-        clientService.save(client);
+        userService.save(client);
 
         return statisticMapper.mapEntityToResponse(save(repoStat));
     }
@@ -108,7 +108,7 @@ public class StatisticService {
     }
 
     private Client getClientById(Long clientId) {
-        return clientService.getById(clientId);
+        return (Client) userService.getById(clientId);
     }
 
     private Optional<Statistic> getByClientAndDate(Client client, LocalDate date) {

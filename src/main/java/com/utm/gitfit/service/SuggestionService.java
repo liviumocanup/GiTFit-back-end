@@ -1,7 +1,6 @@
 package com.utm.gitfit.service;
 
 
-import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.mapper.SuggestionMapper;
 import com.utm.gitfit.model.entities.Statistic;
 import com.utm.gitfit.model.entities.Suggestion;

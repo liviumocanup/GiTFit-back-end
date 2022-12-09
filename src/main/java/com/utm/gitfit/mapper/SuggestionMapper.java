@@ -21,7 +21,6 @@ public interface SuggestionMapper {
 
     @Named("getName")
     static String getName(Coach coach) {
-        System.out.println(coach);
         return coach.getName() + " " + coach.getLastName();
     }
 }

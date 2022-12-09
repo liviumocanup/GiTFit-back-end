@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ClientService {
-    private final UserService userService;
 
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
@@ -32,12 +31,5 @@ public class ClientService {
 
     public Client getById(Long id) {
         return clientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Client with id: " + id + " not found."));
-    }
-
-    @Transactional
-    public Client save(Client client){
-        Client repoClient = clientRepository.save(client);
-        userService.save(repoClient);
-        return repoClient;
     }
 }
