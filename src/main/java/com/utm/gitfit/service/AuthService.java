@@ -1,6 +1,7 @@
 package com.utm.gitfit.service;
 
 
+import com.utm.gitfit.exception.AuthException;
 import com.utm.gitfit.model.client.ApiException;
 import com.utm.gitfit.model.client.api.CustomersApi;
 import com.utm.gitfit.model.client.model.CreatedCustomerResponse;
@@ -58,7 +59,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void registerUser(RegistrationRequest registrationRequest) throws ApiException {
+    public void registerUser(RegistrationRequest registrationRequest) {
         final Role role = roleRepository.findByName(ERole.valueOf(registrationRequest.userType().name()))
                 .orElseThrow();
         final User user = registrationRequest.userType() == AppUserType.CLIENT ? new Client() : new Coach();
@@ -69,10 +70,14 @@ public class AuthService {
         user.setUsername(registrationRequest.username());
         user.setName(registrationRequest.firstName());
         user.setLastName(registrationRequest.surname());
-        final var customerResponse = createSaltEdgeCustomer(user.getEmail());
-        user.setSaltEdgeIdentifier(customerResponse.getData().getId());
+        try {
+            final var customerResponse = createSaltEdgeCustomer(user.getEmail());
+            user.setSaltEdgeIdentifier(customerResponse.getData().getId());
 
-        userRepository.save(user);
+            userRepository.save(user);
+        } catch (ApiException e) {
+            throw new AuthException("Email: " + user.getEmail() + ", already in use.");
+        }
     }
 
     private CreatedCustomerResponse createSaltEdgeCustomer(final String email) throws ApiException {

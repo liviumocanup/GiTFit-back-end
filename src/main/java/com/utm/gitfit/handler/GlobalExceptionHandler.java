@@ -1,5 +1,6 @@
 package com.utm.gitfit.handler;
 
+import com.utm.gitfit.exception.AuthException;
 import com.utm.gitfit.exception.EntityInvalidInputException;
 import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.exception.ErrorResponse;
@@ -21,6 +22,7 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final String ENTITY_NOT_FOUND = "Entity not found";
+    private static final String CONFLICT = "User already registered";
     private static final String BAD_PARAMETER_VALUE = "Bad parameter value";
     private static final String CONSTRAINT_VIOLATION = "Constraint Violated";
 
@@ -38,6 +40,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
                         BAD_PARAMETER_VALUE,
+                        e.getMessage(),
+                        request.getServletPath()));
+    }
+
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ErrorResponse> onAuthException(HttpServletRequest request, AuthException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorResponse(HttpStatus.CONFLICT.value(),
+                        CONFLICT,
                         e.getMessage(),
                         request.getServletPath()));
     }

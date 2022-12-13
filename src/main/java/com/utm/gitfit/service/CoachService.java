@@ -24,7 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CoachService{
+public class CoachService {
 
     private final CoachRepository coachRepository;
     private final CoachMapper coachMapper;
@@ -41,6 +41,15 @@ public class CoachService{
     @Transactional(readOnly = true)
     public CoachResponse findById(Long id) {
         return coachMapper.mapEntityToResponse(getById(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<CoachResponse> findByName(String name) {
+        return coachMapper.mapEntityListToResponseList(getByName(name));
+    }
+
+    public List<Coach> getByName(String name) {
+        return coachRepository.findByNameLikeIgnoreCaseOrLastNameLikeIgnoreCase(name, name);
     }
 
     public Coach getById(Long id) {
