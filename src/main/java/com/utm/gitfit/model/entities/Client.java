@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "client")
-public class Client extends User{
+public class Client extends User {
 
     @ManyToMany
     @JoinTable(name = "client_coach",
@@ -25,6 +25,9 @@ public class Client extends User{
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private Set<ScheduledSession> scheduledSessions;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private Set<Statistic> statistics;
 
     @Override
     public void addConnection(User user) {

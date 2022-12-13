@@ -24,7 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CoachService {
+public class CoachService{
 
     private final CoachRepository coachRepository;
     private final CoachMapper coachMapper;
@@ -43,7 +43,7 @@ public class CoachService {
         return coachMapper.mapEntityToResponse(getById(id));
     }
 
-    private Coach getById(Long id) {
+    public Coach getById(Long id) {
         return coachRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Coach with id: " + id + ", not found."));
     }
 

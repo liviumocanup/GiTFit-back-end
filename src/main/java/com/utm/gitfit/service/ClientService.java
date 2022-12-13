@@ -29,7 +29,7 @@ public class ClientService {
         return clientMapper.mapEntityToResponse(getById(id));
     }
 
-    private Client getById(Long id) {
+    public Client getById(Long id) {
         return clientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Client with id: " + id + " not found."));
     }
 }
