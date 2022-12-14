@@ -29,6 +29,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -64,8 +67,8 @@ public class AuthService {
                 .orElseThrow();
         final User user = registrationRequest.userType() == AppUserType.CLIENT ? new Client() : new Coach();
         user.setUserRole(role);
-        user.setPassword(passwordEncoder.encode(registrationRequest.password()));
-        user.setEmail(registrationRequest.email());
+        user.setPassword(validatePassword(registrationRequest.password()));
+        user.setEmail(validateEmail(registrationRequest.email()));
         user.setBirthday(registrationRequest.birthday());
         user.setUsername(registrationRequest.username());
         user.setName(registrationRequest.firstName());
@@ -87,5 +90,28 @@ public class AuthService {
         customerRequestBody.setData(customerRequestBodyData);
 
         return customersApi.customersPost(customerRequestBody);
+    }
+
+    private String validatePassword(String password){
+        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+
+        if(isValid(password, passwordRegex))
+            return passwordEncoder.encode(password);
+        else throw new AuthException("Your password doesn't meet the requirements. " +
+                "A password must contain one numeric, lowercase, uppercase and special symbol, while having a length of between 8 and 20 characters.");
+    }
+
+    private String validateEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$";
+
+        if(isValid(email, emailRegex))
+            return email;
+        else throw new AuthException("Your email doesn't abide the OWASP requirements.");
+    }
+
+    private boolean isValid(String toValidate, String regex){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(toValidate);
+        return matcher.matches();
     }
 }
