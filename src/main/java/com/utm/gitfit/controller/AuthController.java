@@ -1,6 +1,5 @@
 package com.utm.gitfit.controller;
 
-import com.utm.gitfit.model.client.ApiException;
 import com.utm.gitfit.model.request.LoginRequest;
 import com.utm.gitfit.model.request.RegistrationRequest;
 import com.utm.gitfit.model.response.JwtResponse;
@@ -26,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) throws ApiException {
+    public void registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
         authService.registerUser(registrationRequest);
     }
 }

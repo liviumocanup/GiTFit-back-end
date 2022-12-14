@@ -22,7 +22,7 @@ import java.util.List;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private static final String ENTITY_NOT_FOUND = "Entity not found";
-    private static final String CONFLICT = "User already registered";
+    private static final String AUTHENTICATION_ERROR = "Authentication Error";
     private static final String BAD_PARAMETER_VALUE = "Bad parameter value";
     private static final String CONSTRAINT_VIOLATION = "Constraint Violated";
 
@@ -47,8 +47,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ErrorResponse> onAuthException(HttpServletRequest request, AuthException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorResponse(HttpStatus.CONFLICT.value(),
-                        CONFLICT,
+                .body(new ErrorResponse(HttpStatus.BAD_REQUEST.value(),
+                        AUTHENTICATION_ERROR,
                         e.getMessage(),
                         request.getServletPath()));
     }
