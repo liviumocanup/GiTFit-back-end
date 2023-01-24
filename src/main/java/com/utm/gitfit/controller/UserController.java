@@ -1,8 +1,8 @@
 package com.utm.gitfit.controller;
 
 import com.utm.gitfit.model.dto.PendingConnectionRequest;
-import com.utm.gitfit.model.entities.User;
 import com.utm.gitfit.model.enums.ConnectionRequestAnswer;
+import com.utm.gitfit.model.response.UserResponse;
 import com.utm.gitfit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable Long id){
-        return userService.getById(id);
+    public UserResponse getById(@PathVariable Long id){
+        return userService.findById(id);
     }
 }
