@@ -1,11 +1,14 @@
 package com.utm.gitfit.model.response;
 
-import com.utm.gitfit.model.entities.Client;
+import com.utm.gitfit.model.dto.BillingDetailsDto;
+import com.utm.gitfit.model.dto.ClientDto;
+import com.utm.gitfit.model.dto.ScheduledSessionDto;
+import com.utm.gitfit.model.entities.Role;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -20,11 +23,23 @@ public class CoachResponse {
 
     private String username;
 
-    private String password;
-
     private LocalDate birthday;
 
-    private Long bankAccountId;
+    private BillingDetailsDto billingDetails;
 
-    private List<Client> clients;
+    private String password;
+
+    private Role userRole;
+
+    private String saltEdgeIdentifier;
+
+    private Set<ClientDto> clients;
+
+    private Set<ScheduledSessionDto> scheduledSessions;
+
+    private Double ratePerHour;
+
+    private String gymAddress;
+
+    private String aboutMe;
 }

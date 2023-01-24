@@ -1,5 +1,7 @@
 package com.utm.gitfit.service;
 
+import com.utm.gitfit.exception.AuthException;
+import com.utm.gitfit.exception.EntityInvalidInputException;
 import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.mapper.CoachMapper;
 import com.utm.gitfit.model.client.ApiException;
@@ -59,16 +61,21 @@ public class CoachService {
     @Transactional
     public PaymentTokenResponse scheduleSession(ScheduleRequest scheduleRequest) throws ApiException {
         Coach coach = getById(scheduleRequest.coachId());
-        Client client = (Client) userService.getCurrentUser();
-        Double price = coach.getRatePerHour() * scheduleRequest.hours();
-        ScheduledSession scheduledSession = new ScheduledSession();
-        scheduledSession.setCoach(coach);
-        scheduledSession.setClient(client);
-        scheduledSession.setDuration(scheduleRequest.hours());
-        scheduledSession.setDateAndTime(scheduleRequest.date());
-        scheduledSessionRepository.save(scheduledSession);
+        if (userService.getCurrentUser() instanceof Client client) {
+            if (coach.getRatePerHour() != null) {
+                Double price = coach.getRatePerHour() * scheduleRequest.hours();
+                ScheduledSession scheduledSession = new ScheduledSession();
+                scheduledSession.setCoach(coach);
+                scheduledSession.setClient(client);
+                scheduledSession.setDuration(scheduleRequest.hours());
+                scheduledSession.setDateAndTime(scheduleRequest.date());
+                scheduledSessionRepository.save(scheduledSession);
 
-        return processSessionPayment(price, client);
+                return processSessionPayment(price, client);
+            } else {
+                throw new EntityInvalidInputException("Coach didn't set their Rate Per Hour yet! Kindly ask them to in order to proceed with scheduling.");
+            }
+        } else throw new AuthException("User unauthorized.");
     }
 
     private PaymentTokenResponse processSessionPayment(Double price, Client client) throws ApiException {
@@ -88,7 +95,7 @@ public class CoachService {
 
     private SEPAPaymentAttributes generateSEPAPaymentAttributes(User user, Double price) {
         SEPAPaymentAttributes sepaPaymentAttributes = new SEPAPaymentAttributes();
-        BillingDetails billingDetails = billingDetailsRepository.findByUser_Id(user.getId()).orElseThrow();
+        BillingDetails billingDetails = billingDetailsRepository.findByUser_Id(user.getId()).orElseThrow(() -> new EntityNotFoundException("You didn't set your Billing Information yet! Please do in order to proceed with scheduling."));
         sepaPaymentAttributes.setCreditorIban(billingDetails.getIban());
         sepaPaymentAttributes.setCurrencyCode("EUR");
         sepaPaymentAttributes.setAmount(price.toString());

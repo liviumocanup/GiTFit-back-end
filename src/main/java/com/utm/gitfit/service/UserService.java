@@ -1,6 +1,7 @@
 package com.utm.gitfit.service;
 
 import com.utm.gitfit.exception.EntityInvalidInputException;
+import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.mapper.ConnectionRequestMapper;
 import com.utm.gitfit.mapper.UserMapper;
 import com.utm.gitfit.model.dto.PendingConnectionRequest;
@@ -66,7 +67,7 @@ public class UserService {
 
     @Transactional
     public void answerConnectionRequest(Long requestId, ConnectionRequestAnswer connectionRequestAnswer) {
-        ConnectionRequest connectionRequest = connectionRequestRepository.findById(requestId).orElseThrow();
+        ConnectionRequest connectionRequest = connectionRequestRepository.findById(requestId).orElseThrow(() -> new EntityNotFoundException("Connect Request with id: "+requestId+", not found."));
         ConnectionRequestState newState = switch (connectionRequestAnswer){
             case ACCEPT -> ConnectionRequestState.ACCEPTED;
             case DECLINE -> ConnectionRequestState.DECLINED;
