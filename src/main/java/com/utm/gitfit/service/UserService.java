@@ -1,11 +1,15 @@
 package com.utm.gitfit.service;
 
+import com.utm.gitfit.exception.EntityInvalidInputException;
+import com.utm.gitfit.exception.EntityNotFoundException;
 import com.utm.gitfit.mapper.ConnectionRequestMapper;
+import com.utm.gitfit.mapper.UserMapper;
 import com.utm.gitfit.model.dto.PendingConnectionRequest;
 import com.utm.gitfit.model.entities.ConnectionRequest;
 import com.utm.gitfit.model.entities.User;
 import com.utm.gitfit.model.enums.ConnectionRequestAnswer;
 import com.utm.gitfit.model.enums.ConnectionRequestState;
+import com.utm.gitfit.model.response.UserResponse;
 import com.utm.gitfit.repository.ConnectionRequestRepository;
 import com.utm.gitfit.repository.UserRepository;
 import com.utm.gitfit.security.UserDetailsImpl;
@@ -24,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ConnectionRequestRepository connectionRequestRepository;
     private final ConnectionRequestMapper connectionRequestMapper;
+    private final UserMapper userMapper;
 
     public Long getCurrentUserId(){
         UserDetailsImpl userDetails = (UserDetailsImpl)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -40,10 +45,16 @@ public class UserService {
         return userRepository.findById(id).orElseThrow();
     }
 
+    public UserResponse findById(Long id){
+        return userMapper.mapEntityToResponse(getById(id));
+    }
+
     @Transactional
     public void createConnectionRequestFromCurrentUser(Long to) {
         User currentUser = getCurrentUser();
         User targetUser = getById(to);
+        if(currentUser.equals(targetUser))
+            throw new EntityInvalidInputException("Cannot connect with yourself.");
         ConnectionRequest connectionRequest = new ConnectionRequest(currentUser, targetUser);
         connectionRequestRepository.save(connectionRequest);
     }
@@ -56,7 +67,7 @@ public class UserService {
 
     @Transactional
     public void answerConnectionRequest(Long requestId, ConnectionRequestAnswer connectionRequestAnswer) {
-        ConnectionRequest connectionRequest = connectionRequestRepository.findById(requestId).orElseThrow();
+        ConnectionRequest connectionRequest = connectionRequestRepository.findById(requestId).orElseThrow(() -> new EntityNotFoundException("Connect Request with id: "+requestId+", not found."));
         ConnectionRequestState newState = switch (connectionRequestAnswer){
             case ACCEPT -> ConnectionRequestState.ACCEPTED;
             case DECLINE -> ConnectionRequestState.DECLINED;

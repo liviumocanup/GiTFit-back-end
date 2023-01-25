@@ -8,6 +8,7 @@ import com.utm.gitfit.model.request.ScheduleRequest;
 import com.utm.gitfit.model.response.CoachResponse;
 import com.utm.gitfit.service.CoachService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class CoachController {
     }
 
     @GetMapping("/schedule")
-    public List<ScheduledSession> getAllScheduledSessionsByDate(@RequestParam LocalDate date) {
+    public List<ScheduledSession> getAllScheduledSessionsByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return coachService.getAllScheduledSessionsByDate(date);
     }
 
